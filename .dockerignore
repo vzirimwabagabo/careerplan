@@ -1,0 +1,25 @@
+# Never bake local data or secrets into the image.
+data/
+.env
+.streamlit/secrets.toml
+
+# Development noise
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Repo/editor metadata
+.git/
+.gitignore
+.idea/
+.vscode/
+
+# Source material and smoke-test scratch files
+*.pptx
+_smoke_test.py

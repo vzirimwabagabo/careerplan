@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local data and environment
+data/
+.env
+.env.local
+.streamlit/secrets.toml
+
+# Node / Next.js (web/ also carries its own .gitignore)
+node_modules/
+web/.next/
+web/out/
+web/.vercel/
+web/next-env.d.ts
+*.tsbuildinfo
+
+# Scratch working directories
+.pptx_work/
+.worksheet_work/
+
+# Editor and OS noise
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Office lock files
+~$*

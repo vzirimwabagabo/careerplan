@@ -1,0 +1,20 @@
+services:
+  career-plan-monitor:
+    build: .
+    image: career-plan-monitor:latest
+    container_name: career-plan-monitor
+    restart: unless-stopped
+    ports:
+      # Host port is overridable so the container can coexist with a local
+      # `streamlit run app.py` (which also wants 8501).
+      - "${CAREER_PLAN_PORT:-8501}:8501"
+    environment:
+      # Optional. Leave empty (or unset) to run the app without a login gate.
+      # Only set this if you want password protection.
+      CAREER_PLAN_APP_PASSWORD: "${CAREER_PLAN_APP_PASSWORD:-}"
+    volumes:
+      # Named volume keeps career_plan.db alive across rebuilds and restarts.
+      - career-plan-data:/app/data
+
+volumes:
+  career-plan-data:
