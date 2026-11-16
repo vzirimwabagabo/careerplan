@@ -23,6 +23,26 @@ function widthFor(field: Field): number {
   return field.width === "small" ? 110 : field.width === "large" ? 280 : 180;
 }
 
+/**
+ * Values in link fields are user data, so the scheme is checked before the
+ * value is ever rendered as a clickable href. Only http and https pass, which
+ * stops a stored `javascript:` or `data:` value from becoming a script URL.
+ * Returning the re-serialised URL also normalises away control characters.
+ */
+function safeHref(value: unknown): string | null {
+  if (value == null) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  try {
+    const parsed = new URL(raw);
+    return parsed.protocol === "http:" || parsed.protocol === "https:"
+      ? parsed.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 export function DataGrid({
   table,
   initialRows,
@@ -164,6 +184,7 @@ export function DataGrid({
     }
 
     if (field.type === "link") {
+      const href = safeHref(value);
       return (
         <div className="flex flex-col gap-1">
           <input
@@ -174,15 +195,19 @@ export function DataGrid({
             value={value == null ? "" : String(value)}
             onChange={(event) => update(index, field.col, event.target.value)}
           />
-          {value ? (
+          {href ? (
             <a
-              href={String(value)}
+              href={href}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="truncate px-2 text-xs text-brand"
             >
               open
             </a>
+          ) : value ? (
+            <span className="truncate px-2 text-xs text-muted">
+              not an http(s) link
+            </span>
           ) : null}
         </div>
       );
